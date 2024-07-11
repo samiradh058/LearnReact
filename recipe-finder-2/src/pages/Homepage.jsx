@@ -1,5 +1,17 @@
+import PageNav from "../components/PageNav";
+
+import { useAuth } from "../contexts/FakeAuthContext";
+
 function Homepage() {
-  return <h1>It is homepage.</h1>;
+  const { isAuthenticated } = useAuth();
+
+  console.log(isAuthenticated);
+  return (
+    <main>
+      <PageNav />
+      <h1>It is homepage.</h1>;
+    </main>
+  );
 }
 
 export default Homepage;
