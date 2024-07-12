@@ -11,7 +11,7 @@ import { AuthProvider } from "./contexts/FakeAuthContext";
 
 function App() {
   return (
-    <AuthProvider>
+    <AuthProvider className="bg-home-bg">
       <BrowserRouter>
         <Routes>
           <Route index element={<Homepage />} />
