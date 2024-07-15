@@ -5,9 +5,10 @@ import Homepage from "./pages/Homepage";
 import PageNotFound from "./pages/PageNotFound";
 import About from "./pages/About";
 import Login from "./pages/Login";
-import ProtectedRoute from "./pages/ProtectedRoute";
+// import ProtectedRoute from "./pages/ProtectedRoute";
 
 import { AuthProvider } from "./contexts/FakeAuthContext";
+import { RecipeProvider } from "./contexts/RecipeContext";
 
 function App() {
   return (
@@ -20,9 +21,11 @@ function App() {
           <Route
             path="app"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
+              <RecipeProvider>
                 <AppLayout />
-              </ProtectedRoute>
+              </RecipeProvider>
+              // </ProtectedRoute>
             }
           />
 

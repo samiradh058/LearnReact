@@ -41,7 +41,7 @@ function Login() {
   );
 
   return (
-    <main>
+    <main className="bg-home-bg">
       <PageNav />
       {wrongInput && <h1>Try again</h1>}
       <form action="" onSubmit={handleSubmit}>

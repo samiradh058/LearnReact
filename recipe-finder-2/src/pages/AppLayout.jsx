@@ -1,10 +1,11 @@
 import Logout from "../components/Logout";
+import Recipes from "../components/Recipes";
 
 function AppLayout() {
   return (
     <div>
+      <Recipes />
       <Logout />
-      <h1>Main App</h1>;
     </div>
   );
 }

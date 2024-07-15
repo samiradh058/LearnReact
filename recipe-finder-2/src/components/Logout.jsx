@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/FakeAuthContext";
 
 function Logout() {
-  const { user, logout } = useAuth();
+  // const { user, logout } = useAuth();
+  const { logout } = useAuth();
 
   const navigate = useNavigate();
 
@@ -13,7 +14,8 @@ function Logout() {
 
   return (
     <div>
-      Welcome, {user.name}
+      {/* Welcome, {user.name} */}
+      Welcome
       <button onClick={handleClick}>Logout</button>
     </div>
   );
