@@ -42,3 +42,5 @@ export const { updateName } = userSlice.actions;
 
 // For redux store
 export default userSlice.reducer;
+
+export const getName = (state) => state.user.username;
