@@ -1,19 +1,22 @@
-import Commerce from "@chec/commerce.js";
+import { Outlet } from "react-router-dom";
+
+import Header from "./Header";
+import CartOverview from "../features/cart/CartOverview";
 
 function AppLayout() {
-  const commerce = new Commerce(
-    "pk_test_58194908ade936dbe2618a567eecd1c0d638b4f41b4fd",
+  return (
+    <div className="grid h-screen grid-rows-[auto_1fr_auto] bg-[#F5F5F5]">
+      <Header />
+
+      <div className="overflow-scroll">
+        <main className="mx-[96px] sm:mx-[100px] md:mx-[150px] lg:mx-[200px]">
+          <Outlet />
+        </main>
+      </div>
+
+      <CartOverview />
+    </div>
   );
-
-  commerce.products.list().then((product) => console.log(product));
-
-  commerce.products
-    .list({
-      query: "bag",
-    })
-    .then((response) => console.log(response));
-
-  return <div>Main App</div>;
 }
 
 export default AppLayout;
