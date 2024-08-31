@@ -22,7 +22,7 @@ function Header() {
             }`
           }
         >
-          Product
+          Products
         </NavLink>
         <NavLink
           to="/about"

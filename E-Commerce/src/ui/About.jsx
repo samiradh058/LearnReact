@@ -1,4 +1,12 @@
+import { useState } from "react";
+
 function About() {
+  const [rating, setRating] = useState(4);
+
+  function handleRating(e) {
+    setRating(e.target.value);
+  }
+
   return (
     <>
       <div className="mt-10 text-justify text-lg">
@@ -19,7 +27,7 @@ function About() {
         </p>
       </div>
 
-      <div className="mt-12 text-justify text-lg">
+      <div className="relative mt-12 text-justify text-lg">
         <h1 className="wt-100 indent-8 text-2xl font-bold text-[#333333]">
           Don't just take our word for it—our customers love us!
         </h1>
@@ -76,9 +84,45 @@ function About() {
             </td>
           </tr>
         </table>
+        <form
+          action=""
+          className="absolute right-0 flex items-center space-x-4 border border-stone-300 p-4"
+        >
+          <label
+            htmlFor="feedback"
+            className="text-2xl font-bold text-[#333333]"
+          >
+            Give Your Feedback:
+          </label>
+          <div className="flex flex-col">
+            <div className="flex space-x-6">
+              <input
+                className="mb-4 w-64"
+                type="range"
+                id="rating"
+                name="rating"
+                min="1"
+                max="5"
+                defaultValue={4}
+                value={rating}
+                onChange={handleRating}
+              />
+              <output className="mb-[10px] text-[24px] font-semibold text-[#333333]">
+                {rating}
+              </output>
+            </div>
+
+            <textarea
+              type="text"
+              cols={32}
+              className="columns-8 border border-yellow-500 p-2 indent-2 text-lg text-gray-700"
+              placeholder="Enter your feedback here..."
+            ></textarea>
+          </div>
+        </form>
       </div>
 
-      <div className="mt-10 text-justify">
+      <div className="mt-44 text-justify">
         <h1 className="wt-100 mb-2 indent-8 text-2xl font-bold text-[#333333]">
           Contact Us
         </h1>
@@ -86,20 +130,22 @@ function About() {
           You can follow us on different social medias and also dirctly send us
           an email for some issues or suggestions.
         </h2>
-        <div className="mx-20 flex space-x-20">
+        <div className="mx-20 flex space-x-[80px]">
           <ul className="list-disc">
-            <li className="py-1 text-[20px]">
+            <li className="py-1 text-[20px] hover:text-[22px]">
               <a href="">Facebook</a>
             </li>
-            <li className="py-1 text-[20px]">
+            <li className="py-1 text-[20px] hover:text-[22px]">
               <a href="">Twitter</a>
             </li>
-            <li className="py-1 text-[20px]">
+            <li className="py-1 pr-4 text-[20px] hover:pr-[6px] hover:text-[22px]">
               <a href="">Instagram</a>
             </li>
           </ul>
           <ul className="list-disc">
-            <li className="py-1 text-[20px]">Email</li>
+            <li className="py-1 text-[20px] hover:text-[22px]">
+              <a href="">Email</a>
+            </li>
           </ul>
         </div>
       </div>
