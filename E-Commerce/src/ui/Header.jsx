@@ -17,7 +17,7 @@ function Header() {
           className={({ isActive }) =>
             `px-3 hover:rounded-lg hover:bg-[#00264D] hover:px-3 hover:py-2 ${
               isActive
-                ? "text-[#4169E1] hover:bg-transparent"
+                ? "bg-[#00264D] px-3 py-2 text-[#4169E1]"
                 : "text-[#00CCCC]"
             }`
           }
@@ -29,7 +29,7 @@ function Header() {
           className={({ isActive }) =>
             `px-3 hover:rounded-lg hover:bg-[#00264D] hover:px-3 hover:py-2 ${
               isActive
-                ? "text-[#4169E1] hover:bg-transparent"
+                ? "bg-[#00264D] px-3 py-2 text-[#4169E1]"
                 : "text-[#00CCCC]"
             }`
           }

@@ -5,7 +5,6 @@ import Error from "./ui/Error";
 import Home from "./ui/Home";
 import Product, { loader as productLoader } from "./features/product/Product";
 import Login from "./features/user/Login";
-import ProductDetails from "./features/product/ProductDetails";
 import Cart from "./features/cart/Cart";
 import UserDetails from "./features/user/UserDetails";
 import CreateOrder from "./features/order/CreateOrder";
@@ -41,10 +40,10 @@ const router = createBrowserRouter([
         path: "/me",
         element: <UserDetails />,
       },
-      {
-        path: "/product/:productId",
-        element: <ProductDetails />,
-      },
+      // {
+      //   path: "/product/:productId",
+      //   element: <ProductDetails />,
+      // },
 
       {
         path: "/order/new",
