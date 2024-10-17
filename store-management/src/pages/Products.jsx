@@ -1,5 +1,11 @@
+import ProductTable from "../features/product/ProductTable";
+
 function Products() {
-  return <div>List all products</div>;
+  return (
+    <div>
+      <ProductTable />
+    </div>
+  );
 }
 
 export default Products;

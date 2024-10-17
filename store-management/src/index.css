@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navLinkStyles {
+  @apply flex items-center gap-4 text-stone-700 text-lg font-medium transition-colors duration-300 py-2 px-3;
+}
+
+.navLinkActive {
+  @apply bg-stone-200 text-stone-800 rounded-md;
+}
+
+.navLinkInactive {
+  @apply hover:text-stone-800 hover:bg-stone-100 hover:rounded-md;
+}
