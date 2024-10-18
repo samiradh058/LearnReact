@@ -7,7 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import SellingPrice from "./pages/SellingPrice";
 import CostPrice from "./pages/CostPrice";
 import Products from "./pages/Products";
-// import ProductDetails from "./pages/ProductDetails";
 import PageNotFound from "./pages/PageNotFound";
 import ProductDetails from "./pages/ProductDetails";
 

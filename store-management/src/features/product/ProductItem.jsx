@@ -17,7 +17,7 @@ function ProductItem({ product }) {
   return (
     <NavLink
       to={`${productId}`}
-      className="grid  grid-cols-[1fr_1.5fr_0.6fr_0.8fr_1fr] gap-[2.4rem] items-center text-center px-4 py-4"
+      className="grid  grid-cols-[1fr_1.5fr_0.6fr_0.8fr_1fr] gap-[2.4rem] items-center text-center px-4 py-4 hover:bg-stone-50"
     >
       <div>
         <img src={Image} alt="Product image" />
