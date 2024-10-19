@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function getProducts() {
   const { data, error } = await supabase.from("products").select("*");
@@ -19,6 +19,35 @@ export async function getProductsFromId(productId) {
   if (error) {
     throw new Error("Product with specified id is not found");
   }
-
   return product;
+}
+
+export async function createProduct(newProduct) {
+  const imageName = `${Math.random()}-${newProduct.image.name}`.replaceAll(
+    "/",
+    ""
+  );
+  const imagePath = `${supabaseUrl}/storage/v1/object/public/product/${imageName}`;
+
+  const { data, error } = await supabase
+    .from("products")
+    .insert([{ ...newProduct, image: imagePath }])
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error("Cabin could not be created");
+  }
+
+  const { error: storageError } = await supabase.storage
+    .from("product")
+    .upload(imageName, newProduct.image);
+
+  if (storageError) {
+    await supabase.from("prouducts").delete().eq("id", data.id);
+    console.error(storageError);
+    throw new Error(
+      "Product image could not be uploaded and the product was not created"
+    );
+  }
 }

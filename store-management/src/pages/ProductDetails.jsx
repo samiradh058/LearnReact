@@ -1,11 +1,9 @@
-/*eslint-disable*/
-
 import { useProductId } from "../features/product/useProductId";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { HiArrowLongLeft } from "react-icons/hi2";
 
-import Spinner from "../ui/Spiner";
+import Spinner from "../ui/Spinner";
 
 function ProductDetails() {
   const { productId } = useParams();
@@ -35,36 +33,36 @@ function ProductDetails() {
       <div className="mx-auto bg-stone-200 py-4 px-6 rounded-md text-xl">
         <img
           className="bg-stone-800 w-[800px] h-[300px]"
-          src=""
+          src={product.image}
           alt="Obtained from supabase"
         />
         <div className="flex flex-row mt-8 justify-between">
           <div className="space-y-2">
             <div>
-              Name: <span className={listSytyle}>{product.Name}</span>
+              Name: <span className={listSytyle}>{product.name}</span>
             </div>
             <div>
-              Quantity: <span className={listSytyle}>{product.Quantity}</span>
+              Quantity: <span className={listSytyle}>{product.quantity}</span>
             </div>
             <div>
-              Price: <span className={listSytyle}>{product.Price}</span>
+              Price: <span className={listSytyle}>{product.price}</span>
             </div>
           </div>
           <div className="space-y-2">
             <div>
               Bought Date:{" "}
-              <span className={listSytyle}>{product.BoughtDate}</span>
+              <span className={listSytyle}>{product.boughtDate}</span>
             </div>
             <div>
               Paid:{" "}
               <span className={listSytyle}>
-                {product.Paid === true ? "✅" : "❌"}
+                {product.paid === true ? "✅" : "❌"}
               </span>
             </div>
           </div>
         </div>
         <div className="mt-2">
-          Description: <span className={listSytyle}>{product.Description}</span>
+          Description: <span className={listSytyle}>{product.description}</span>
         </div>
       </div>
     </div>

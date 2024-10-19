@@ -1,5 +1,5 @@
 function SellingPrice() {
-  return <div>It is selling price page</div>;
+  return <div>Hey it is SP page</div>;
 }
 
 export default SellingPrice;

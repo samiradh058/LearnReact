@@ -2,7 +2,7 @@
 
 import { useProducts } from "./useProducts";
 
-import Spinner from "../../ui/Spiner";
+import Spinner from "../../ui/Spinner";
 import ProductItem from "./ProductItem";
 
 function ProductTable() {
