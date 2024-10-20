@@ -4,13 +4,26 @@ import { useProductId } from "../features/product/useProductId";
 import Spinner from "../ui/Spinner";
 import { HiArrowLongLeft } from "react-icons/hi2";
 import { useForm } from "react-hook-form";
+import { useSellProduct } from "../features/product/useSellProduct";
 
 function SellingPrice() {
+  const { isSelling, createNewBuyer } = useSellProduct();
+
   const { productId } = useParams();
   const { isPending, product, error } = useProductId(productId);
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm({ defaultValues: {} });
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      Item_Id: productId,
+    },
+  });
+
+  // const { errors } = formState;
+
+  // if (errors) {
+  //   throw new Error("Error created uploading buyers details");
+  // }
 
   if (isPending) return <Spinner />;
   if (error) throw new Error("Error loading Selling forms");
@@ -21,6 +34,7 @@ function SellingPrice() {
 
   function onSubmit(data) {
     console.log(data);
+    createNewBuyer({ ...data }, { onSuccess: () => reset() });
   }
 
   const labelStyle = "text-2xl mr-10";
@@ -43,15 +57,15 @@ function SellingPrice() {
           <div className="flex flex-col gap-4">
             <div>
               <label className={labelStyle} htmlFor="name">
-                Name:
+                Item Id:
               </label>
               <input
                 className={`${inputStyle} w-[312px]`}
                 type="text"
                 id="name"
                 disabled
-                placeholder={product.name}
-                {...register("name", {})}
+                defaultValue={productId}
+                {...register("Item_Id", {})}
               />
             </div>
 
@@ -64,7 +78,8 @@ function SellingPrice() {
                 type="number"
                 placeholder={product.quantity}
                 id="quantity"
-                {...register("quantity", {})}
+                disabled={isSelling}
+                {...register("Quantity_Sold", {})}
                 onBlur={(e) => {
                   let value = parseInt(e.target.value);
                   if (value > product.quantity) value = product.quantity;
@@ -83,8 +98,9 @@ function SellingPrice() {
                 type="number"
                 step="0.01"
                 id="price"
+                disabled={isSelling}
                 placeholder={product.price}
-                {...register("price", {})}
+                {...register("S_Unit_Price", {})}
                 onBlur={(e) => {
                   let value = parseInt(e.target.value);
                   if (value < product.price) value = product.price;
@@ -101,7 +117,8 @@ function SellingPrice() {
                 className={`${inputStyle} w-[240px]`}
                 type="date"
                 id="soldDate"
-                {...register("soldDate", {})}
+                disabled={isSelling}
+                {...register("Sell_Date", {})}
               />
             </div>
 
@@ -113,7 +130,8 @@ function SellingPrice() {
                 type="text"
                 className={`${inputStyle} w-[212px]`}
                 id="description"
-                {...register("description", {})}
+                disabled={isSelling}
+                {...register("Description", {})}
               ></input>
             </div>
 
@@ -125,7 +143,8 @@ function SellingPrice() {
                 type="text"
                 className={`${inputStyle} w-[212px]`}
                 name="buyersName"
-                {...register("buyersName", {})}
+                disabled={isSelling}
+                {...register("Buyers_Name", {})}
               ></input>
             </div>
 
@@ -133,11 +152,20 @@ function SellingPrice() {
               <label className={labelStyle} htmlFor="received">
                 Money received:
               </label>
-              <input className="h-6 w-6" type="checkbox" />
+              <input
+                className="h-6 w-6"
+                type="checkbox"
+                disabled={isSelling}
+                {...register("Money_Received", {})}
+              />
             </div>
           </div>
           <div className="flex justify-end mt-4">
-            <button className="px-4 py-2 bg-green-400 rounded-md" type="subit">
+            <button
+              className="px-4 py-2 bg-green-400 rounded-md"
+              type="subit"
+              disabled={isSelling}
+            >
               Sell
             </button>
           </div>

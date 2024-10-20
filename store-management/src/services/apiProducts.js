@@ -51,3 +51,17 @@ export async function createProduct(newProduct) {
     );
   }
 }
+
+export async function createBuyer(sellItem) {
+  console.log(sellItem);
+  const { data, error } = await supabase
+    .from("sells")
+    .insert([sellItem])
+    .select();
+
+  if (error) {
+    console.log(error);
+    throw new Error("Item selling details could not be completed!");
+  }
+  return data;
+}

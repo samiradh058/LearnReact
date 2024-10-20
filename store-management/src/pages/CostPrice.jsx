@@ -1,9 +1,5 @@
-/*eslint-disable*/
-
 import { useForm } from "react-hook-form";
 import { useCreateProduct } from "../features/product/useCreateProduct";
-
-import Spinner from "../ui/Spinner";
 
 function CostPrice() {
   const { isCreating, createNewProduct } = useCreateProduct();
@@ -16,7 +12,7 @@ function CostPrice() {
 
   function onSubmit(data) {
     const image = data.image[0];
-    createNewProduct({ ...data, image }, { onSuccess: (data) => reset() });
+    createNewProduct({ ...data, image }, { onSuccess: () => reset() });
   }
 
   const labelStyle = "text-2xl";
