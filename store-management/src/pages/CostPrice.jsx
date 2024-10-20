@@ -16,7 +16,6 @@ function CostPrice() {
 
   function onSubmit(data) {
     const image = data.image[0];
-    console.log(data);
     createNewProduct({ ...data, image }, { onSuccess: (data) => reset() });
   }
 

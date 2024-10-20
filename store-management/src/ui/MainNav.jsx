@@ -1,10 +1,5 @@
 import { NavLink } from "react-router-dom";
-import {
-  HiHome,
-  HiCloudArrowDown,
-  HiCloudArrowUp,
-  HiMiniCircleStack,
-} from "react-icons/hi2";
+import { HiHome, HiCloudArrowDown, HiMiniCircleStack } from "react-icons/hi2";
 import classNames from "classnames";
 
 function MainNav() {
@@ -28,16 +23,16 @@ function MainNav() {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/bought" className={navLinkStyles}>
+        <NavLink to="/buy" className={navLinkStyles}>
           <HiCloudArrowDown />
           Bought
         </NavLink>
       </li>
       <li>
-        <NavLink to="/sold" className={navLinkStyles}>
+        {/* <NavLink to="/sold" className={navLinkStyles}>
           <HiCloudArrowUp />
           Sold
-        </NavLink>
+        </NavLink> */}
       </li>
     </ul>
   );

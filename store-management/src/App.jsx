@@ -31,8 +31,8 @@ function App() {
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="products" element={<Products />} />
             <Route path="products/:productId" element={<ProductDetails />} />
-            <Route path="bought" element={<CostPrice />} />
-            <Route path="sold" element={<SellingPrice />} />
+            <Route path="buy" element={<CostPrice />} />
+            <Route path="sell/:productId" element={<SellingPrice />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

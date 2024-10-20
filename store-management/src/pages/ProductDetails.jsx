@@ -10,7 +10,7 @@ function ProductDetails() {
   const { isPending, product, error } = useProductId(productId);
   const navigate = useNavigate();
 
-  if (error) return <Spinner />;
+  if (error) throw new Error("Error fetching product details");
   if (isPending) return <Spinner />;
 
   function goBackToProduct() {
