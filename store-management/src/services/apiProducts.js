@@ -35,7 +35,6 @@ export async function createProduct(newProduct) {
     .select();
 
   if (error) {
-    console.log(error);
     throw new Error("Cabin could not be created");
   }
 
@@ -60,8 +59,46 @@ export async function createBuyer(sellItem) {
     .select();
 
   if (error) {
-    console.log(error);
     throw new Error("Item selling details could not be completed!");
   }
+
+  // Decrease quantity of item when sold
+  let { data: products, error: decreaseQuantityError } = await supabase
+    .from("products")
+    .select("quantity, price")
+    .eq("id", sellItem.Item_Id);
+
+  console.log(products);
+
+  if (decreaseQuantityError) {
+    throw new Error("Error fetching product quantity!");
+  }
+
+  if (!products || products.length === 0) {
+    throw new Error("Product not found or quantity unavailable!");
+  }
+
+  const currentQuantity = products[0].quantity;
+  const soldQuantity = sellItem.Quantity_Sold;
+
+  const { error: errorDecreasingQuantity } = await supabase
+    .from("products")
+    .upsert({
+      id: sellItem.Item_Id,
+      quantity: currentQuantity - parseInt(soldQuantity),
+    })
+    .select();
+
+  if (errorDecreasingQuantity) {
+    throw new Error("Error during decreasing product quantity");
+  }
+
+  console.log(
+    `Profit is: ${(
+      soldQuantity * sellItem.S_Unit_Price -
+      products[0].price * soldQuantity
+    ).toFixed(2)}`
+  );
+
   return data;
 }
