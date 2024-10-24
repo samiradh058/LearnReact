@@ -52,23 +52,20 @@ export async function createProduct(newProduct) {
 }
 
 export async function createBuyer(sellItem) {
-  console.log(sellItem);
-  const { data, error } = await supabase
+  const { error: errorUpdatingSells } = await supabase
     .from("sells")
     .insert([sellItem])
     .select();
 
-  if (error) {
+  if (errorUpdatingSells) {
     throw new Error("Item selling details could not be completed!");
   }
 
   // Decrease quantity of item when sold
   let { data: products, error: decreaseQuantityError } = await supabase
     .from("products")
-    .select("quantity, price")
+    .select("quantity, price, profit")
     .eq("id", sellItem.Item_Id);
-
-  console.log(products);
 
   if (decreaseQuantityError) {
     throw new Error("Error fetching product quantity!");
@@ -80,25 +77,25 @@ export async function createBuyer(sellItem) {
 
   const currentQuantity = products[0].quantity;
   const soldQuantity = sellItem.Quantity_Sold;
+  const currentProfit = products[0].profit;
 
-  const { error: errorDecreasingQuantity } = await supabase
+  const { error: errorUpdatingQuantityandProfit } = await supabase
     .from("products")
     .upsert({
       id: sellItem.Item_Id,
       quantity: currentQuantity - parseInt(soldQuantity),
+      profit:
+        currentProfit +
+        parseInt(
+          soldQuantity * sellItem.S_Unit_Price -
+            products[0].price * soldQuantity
+        ),
     })
     .select();
 
-  if (errorDecreasingQuantity) {
-    throw new Error("Error during decreasing product quantity");
+  if (errorUpdatingQuantityandProfit) {
+    throw new Error(
+      "Error during decreasing product quantity and updating profit"
+    );
   }
-
-  console.log(
-    `Profit is: ${(
-      soldQuantity * sellItem.S_Unit_Price -
-      products[0].price * soldQuantity
-    ).toFixed(2)}`
-  );
-
-  return data;
 }

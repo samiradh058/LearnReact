@@ -59,6 +59,14 @@ function ProductDetails() {
                 {product.paid === true ? "✅" : "❌"}
               </span>
             </div>
+            {product.profit && (
+              <div>
+                Profit till now:{" "}
+                <span className={`${listSytyle} bg-green-300 p-1 rounded-lg`}>
+                  Rs.{product.profit}
+                </span>
+              </div>
+            )}
           </div>
         </div>
         <div className="mt-2">

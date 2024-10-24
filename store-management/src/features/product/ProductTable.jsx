@@ -5,10 +5,37 @@ import { useProducts } from "./useProducts";
 import Spinner from "../../ui/Spinner";
 import ProductItem from "./ProductItem";
 
-function ProductTable() {
+function ProductTable({ sortCriteria }) {
   const { isPending, products } = useProducts();
 
   if (isPending || !products) return <Spinner />;
+
+  // Sort the products
+  let criteria = sortCriteria ? sortCriteria : "name-asc";
+  const [field, direction] = criteria?.split("-");
+  const modifier = direction === "asc" ? 1 : -1;
+
+  let sortProducts = products;
+
+  if (field === "") {
+    sortProducts = products.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  if (field === "name") {
+    sortProducts = products.sort(
+      (a, b) => a[field].localeCompare(b[field]) * modifier
+    );
+  }
+
+  if (field === "quantity") {
+    sortProducts = products.sort((a, b) => (a[field] - b[field]) * modifier);
+  }
+
+  if (field === "boughtDate") {
+    sortProducts = products.sort(
+      (a, b) => (new Date(a[field]) - new Date(b[field])) * modifier
+    );
+  }
 
   return (
     <div className="border-stone-200 border-[1px] text-[1.4rem] rounded-md overflow-hidden mx-8 mt-4 ">
@@ -21,7 +48,7 @@ function ProductTable() {
         <div>Sell</div>
       </div>
 
-      {products.map((product) => (
+      {sortProducts.map((product) => (
         <ProductItem product={product} key={product.id} />
       ))}
     </div>
