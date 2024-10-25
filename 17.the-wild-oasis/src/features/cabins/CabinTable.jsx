@@ -16,7 +16,6 @@ function CabinTable() {
 
   // 1) Filter
   const filterValue = searchParams.get("discount") || "all";
-
   let filteredCabins;
   if (filterValue === "all") filteredCabins = cabins;
   if (filterValue === "no-discount")
