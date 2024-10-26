@@ -25,7 +25,7 @@ function MainNav() {
       <li>
         <NavLink to="/buy" className={navLinkStyles}>
           <HiCloudArrowDown />
-          Bought
+          Bought (New Item)
         </NavLink>
       </li>
       <li>
