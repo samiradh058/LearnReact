@@ -4,11 +4,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HiArrowLongLeft } from "react-icons/hi2";
 
 import Spinner from "../ui/Spinner";
+import { useState } from "react";
 
 function ProductDetails() {
+  const [isModalOpen, setIsModalOpen] = useState();
+
   const { productId } = useParams();
   const { isPending, product, error } = useProductId(productId);
+
   const navigate = useNavigate();
+
+  function handleOutsideClick() {
+    console.log("hello");
+    setIsModalOpen(false);
+  }
+
+  if (isModalOpen) {
+    document.addEventListener("mousedown", handleOutsideClick);
+  }
 
   if (error) throw new Error("Error fetching product details");
   if (isPending) return <Spinner />;
@@ -19,10 +32,12 @@ function ProductDetails() {
 
   const listSytyle = "font-bold text-[22px]";
 
-  console.log(product);
+  function handleAddMore() {
+    setIsModalOpen(true);
+  }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <button
         onClick={goBackToProduct}
         className="px-4 py-1  bg-green-400 text-[32px] m-2 rounded-xl w-fit"
@@ -30,7 +45,11 @@ function ProductDetails() {
         <HiArrowLongLeft />
       </button>
 
-      <div className="mx-auto bg-stone-200 py-4 px-6 rounded-md text-xl">
+      <div
+        className={`mx-auto bg-stone-200 py-4 px-6 rounded-md text-xl ${
+          isModalOpen ? "blur-sm" : ""
+        }`}
+      >
         <img
           className="bg-stone-800 w-[800px] h-[300px]"
           src={product.image}
@@ -69,10 +88,28 @@ function ProductDetails() {
             )}
           </div>
         </div>
-        <div className="mt-2">
-          Description: <span className={listSytyle}>{product.description}</span>
+        <div className="flex justify-between">
+          <div className="mt-2 ">
+            Description:{" "}
+            <span className={listSytyle}>{product.description}</span>
+          </div>
+          <div>
+            <button
+              onClick={handleAddMore}
+              className={`bg-green-400 p-2 border rounded-lg hover:bg-green-500 ${
+                product.profit > 0 ? "mt-4" : ""
+              }`}
+            >
+              Add More
+            </button>
+          </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2  -translate-y-1/2 bg-stone-200">
+          Add More
+        </div>
+      )}
     </div>
   );
 }

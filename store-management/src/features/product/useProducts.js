@@ -8,6 +8,19 @@ export function useProducts() {
 
   const [searchParams] = useSearchParams();
 
+  // Filter
+  let filter;
+  const filterValue = searchParams.get("status");
+  if (!filterValue || filterValue === "all") {
+    filter = null;
+  }
+  if (filterValue === "products-remaining") {
+    filter = { field: "quantity", operator: "gt", value: 0 };
+  }
+  if (filterValue === "products-sold") {
+    filter = { field: "quantity", operator: "eq", value: 0 };
+  }
+
   // Pagination
   const page = !searchParams.get("page") ? 1 : Number(searchParams.get("page"));
 
@@ -16,8 +29,8 @@ export function useProducts() {
     data: { data: products, count } = {},
     error,
   } = useQuery({
-    queryKey: ["products", page],
-    queryFn: () => getProducts({ page }),
+    queryKey: ["products", page, filter],
+    queryFn: () => getProducts({ page, filter }),
   });
 
   // PreFetching

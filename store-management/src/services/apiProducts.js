@@ -1,11 +1,20 @@
 import { PAGE_SIZE } from "../../constants";
 import supabase, { supabaseUrl } from "./supabase";
 
-export async function getProducts({ page }) {
+export async function getProducts({ page, filter }) {
   let query = supabase.from("products").select("*", { count: "exact" });
 
-  // Pagination
+  // Filter
+  if (filter) {
+    if (filter.operator === "gt") {
+      query = query.gt(filter.field, filter.value);
+    } else if (filter.operator === "eq") {
+      query = query.eq(filter.field, filter.value);
+    }
+  }
+
   if (page) {
+    // Pagination
     const from = (page - 1) * PAGE_SIZE;
     const to = from + (PAGE_SIZE - 1);
     query = query.range(from, to);
