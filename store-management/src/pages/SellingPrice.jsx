@@ -10,7 +10,7 @@ function SellingPrice() {
   const { isSelling, createNewBuyer } = useSellProduct();
 
   const { productId } = useParams();
-  const { isPending, product, error } = useProductId(productId);
+  const { isPending, product } = useProductId(productId);
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset } = useForm({
@@ -19,21 +19,13 @@ function SellingPrice() {
     },
   });
 
-  // const { errors } = formState;
-
-  // if (errors) {
-  //   throw new Error("Error created uploading buyers details");
-  // }
-
   if (isPending) return <Spinner />;
-  if (error) throw new Error("Error loading Selling forms");
 
   function goBackToProduct() {
     navigate("/products");
   }
 
   function onSubmit(data) {
-    console.log(data);
     createNewBuyer({ ...data }, { onSuccess: () => reset() });
   }
 
@@ -163,7 +155,7 @@ function SellingPrice() {
           <div className="flex justify-end mt-4">
             <button
               className="px-4 py-2 bg-green-400 rounded-md"
-              type="subit"
+              type="submit"
               disabled={isSelling}
             >
               Sell

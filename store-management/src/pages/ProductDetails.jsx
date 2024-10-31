@@ -4,19 +4,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import { HiArrowLongLeft } from "react-icons/hi2";
 
 import Spinner from "../ui/Spinner";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import AddingMoreForm from "../features/product/AddingMoreForm";
 
 function ProductDetails() {
   const [isModalOpen, setIsModalOpen] = useState();
+  const formRef = useRef(null);
 
   const { productId } = useParams();
   const { isPending, product, error } = useProductId(productId);
 
   const navigate = useNavigate();
 
-  function handleOutsideClick() {
-    console.log("hello");
-    setIsModalOpen(false);
+  function handleOutsideClick(e) {
+    if (formRef.current && !formRef.current.contains(e.target)) {
+      setIsModalOpen(false);
+    }
   }
 
   if (isModalOpen) {
@@ -106,8 +109,11 @@ function ProductDetails() {
         </div>
       </div>
       {isModalOpen && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2  -translate-y-1/2 bg-stone-200">
-          Add More
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2  -translate-y-1/2"
+          ref={formRef}
+        >
+          <AddingMoreForm />
         </div>
       )}
     </div>

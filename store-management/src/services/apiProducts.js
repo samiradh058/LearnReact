@@ -24,7 +24,6 @@ export async function getProducts({ page, filter }) {
   if (error) {
     throw new Error("Products could not be loaded");
   }
-  console.log(count);
 
   return { data, count };
 }
