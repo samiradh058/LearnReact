@@ -67,7 +67,6 @@ export async function getBookingsAfterDate(date) {
     console.error(error);
     throw new Error("Bookings could not get loaded");
   }
-
   return data;
 }
 
