@@ -13,6 +13,7 @@ function ProductDetails() {
 
   const { productId } = useParams();
   const { isPending, product, error } = useProductId(productId);
+  console.log(product);
 
   const navigate = useNavigate();
 
@@ -39,6 +40,8 @@ function ProductDetails() {
     setIsModalOpen(true);
   }
 
+  const numOfDetails = product.details.length;
+
   return (
     <div className="flex flex-col relative">
       <button
@@ -63,28 +66,66 @@ function ProductDetails() {
             <div>
               Name: <span className={listSytyle}>{product.name}</span>
             </div>
-            <div>
-              Quantity: <span className={listSytyle}>{product.quantity}</span>
+            <div className="flex">
+              Quantity:{" "}
+              <span className={`${listSytyle} flex`}>
+                {product.details.reduce((ini, acc) => ini + acc.quantity, 0)} (
+                {product.details.map((each, index) => (
+                  <p key={index}>
+                    {each.quantity}
+                    {index < numOfDetails - 1 ? "+" : ""}
+                  </p>
+                ))}
+                )
+              </span>
             </div>
-            <div>
-              Price: <span className={listSytyle}>{product.price}</span>
+            <div className="flex">
+              Price:{" "}
+              <span className={`${listSytyle} flex`}>
+                {product.details.reduce((ini, acc) => ini + acc.price, 0) /
+                  numOfDetails}{" "}
+                (
+                {product.details.map((each, index) => (
+                  <p key={index}>
+                    {each.price}
+                    {index < numOfDetails - 1 ? "," : ""}
+                  </p>
+                ))}
+                )
+              </span>
             </div>
           </div>
           <div className="space-y-2">
-            <div>
+            <div className="flex">
               Bought Date:{" "}
-              <span className={listSytyle}>{product.boughtDate}</span>
+              <span className={`${listSytyle} flex flex-col`}>
+                {product.details.map((each, index) => (
+                  <p key={index}>
+                    {each.boughtDate}
+                    {index < numOfDetails - 1 ? "," : ""}
+                  </p>
+                ))}
+              </span>
             </div>
-            <div>
+            <div className="flex">
               Paid:{" "}
-              <span className={listSytyle}>
-                {product.paid === true ? "✅" : "❌"}
+              <span className={`${listSytyle} flex`}>
+                {product.details.map((each, index) => (
+                  <p key={index}>
+                    {each.paid === true ? "✅" : "❌"}
+                    {index < numOfDetails - 1 ? "," : ""}
+                  </p>
+                ))}
               </span>
             </div>
             {product.profit && (
               <div>
                 Profit till now:{" "}
-                <span className={`${listSytyle} bg-green-300 p-1 rounded-lg`}>
+                <span
+                  className={`${listSytyle}  p-1 rounded-lg ${
+                    product.profit > 0 ? "bg-green-300" : "bg-red-300"
+                  }`}
+                >
                   Rs.{product.profit}
                 </span>
               </div>
@@ -99,7 +140,7 @@ function ProductDetails() {
           <div>
             <button
               onClick={handleAddMore}
-              className={`bg-green-400 p-2 border rounded-lg hover:bg-green-500 ${
+              className={`bg-green-400 p-2 border rounded-lg hover:bg-green-500 mt-[48px] ${
                 product.profit > 0 ? "mt-4" : ""
               }`}
             >

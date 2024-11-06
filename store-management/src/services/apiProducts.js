@@ -1,17 +1,31 @@
+/*eslint-disable*/
+
 import { PAGE_SIZE } from "../../constants";
 import supabase, { supabaseUrl } from "./supabase";
 
 export async function getProducts({ page, filter }) {
-  let query = supabase.from("products").select("*", { count: "exact" });
+  let query = supabase
+    .from("products")
+    .select("*, details(*)", { count: "exact" });
 
-  // Filter
-  if (filter) {
-    if (filter.operator === "gt") {
-      query = query.gt(filter.field, filter.value);
-    } else if (filter.operator === "eq") {
-      query = query.eq(filter.field, filter.value);
-    }
-  }
+  // const { data, error, count } = await query;
+  // console.log(data);
+
+  // // Filter
+  // if (filter) {
+  //   console.log(filter);
+  //   if (filter.operator === "gt") {
+  //     query = query.gt(
+  //       data[0].details.reduce((sum, item) => sum + item.quantity, 0),
+  //       filter.value
+  //     );
+  //   } else if (filter.operator === "eq") {
+  //     query = query.eq(
+  //       data[0].details.reduce((sum, item) => sum + item.quantity, 0),
+  //       filter.value
+  //     );
+  //   }
+  // }
 
   if (page) {
     // Pagination
@@ -24,14 +38,14 @@ export async function getProducts({ page, filter }) {
   if (error) {
     throw new Error("Products could not be loaded");
   }
-
+  console.log(data);
   return { data, count };
 }
 
 export async function getProductsFromId(productId) {
   let { data: product, error } = await supabase
     .from("products")
-    .select("*")
+    .select("*, details(*)")
     // Filters
     .eq("id", productId)
     .single();
@@ -43,19 +57,49 @@ export async function getProductsFromId(productId) {
 }
 
 export async function createProduct(newProduct) {
+  console.log(newProduct);
   const imageName = `${Math.random()}-${newProduct.image.name}`.replaceAll(
     "/",
     ""
   );
   const imagePath = `${supabaseUrl}/storage/v1/object/public/product/${imageName}`;
 
-  const { data, error } = await supabase
+  const { data: productData, error: productError } = await supabase
     .from("products")
-    .insert([{ ...newProduct, image: imagePath }])
+    .insert([
+      {
+        name: newProduct.name,
+        description: newProduct.description,
+        image: imagePath,
+      },
+    ])
     .select();
 
-  if (error) {
-    throw new Error("Cabin could not be created");
+  if (productError) {
+    throw new Error("Error inserting product", productError);
+  }
+
+  const newProductId = productData ? productData[0].id : null;
+
+  if (!newProductId) {
+    throw new Error("Product ID not found.");
+  }
+
+  const { data: detailsData, error: detailsError } = await supabase
+    .from("details")
+    .insert([
+      {
+        boughtDate: newProduct.boughtDate,
+        price: newProduct.price,
+        quantity: newProduct.quantity,
+        paid: newProduct.paid,
+        productId: newProductId,
+      },
+    ])
+    .select();
+
+  if (detailsError) {
+    throw new Error("Product could not be created");
   }
 
   const { error: storageError } = await supabase.storage
@@ -84,8 +128,10 @@ export async function createBuyer(sellItem) {
   // Decrease quantity of item when sold
   let { data: products, error: decreaseQuantityError } = await supabase
     .from("products")
-    .select("quantity, price, profit")
+    .select("profit, details(quantity, price)")
     .eq("id", sellItem.Item_Id);
+
+  console.log(products);
 
   if (decreaseQuantityError) {
     throw new Error("Error fetching product quantity!");
@@ -95,27 +141,87 @@ export async function createBuyer(sellItem) {
     throw new Error("Product not found or quantity unavailable!");
   }
 
-  const currentQuantity = products[0].quantity;
+  const currentQuantity = products[0].details.reduce(
+    (ini, acc) => ini + acc.quantity,
+    0
+  );
   const soldQuantity = sellItem.Quantity_Sold;
   const currentProfit = products[0].profit;
 
-  const { error: errorUpdatingQuantityandProfit } = await supabase
+  const { data: details, error: errorFetchingDetails } = await supabase
+    .from("details")
+    .select("id, quantity, price, boughtDate")
+    .eq("productId", sellItem.Item_Id)
+    .order("boughtDate", { ascending: true })
+    .limit(1);
+
+  if (errorFetchingDetails || details.length === 0) {
+    throw new Error(
+      "Error fetching details or no records found:",
+      errorFetchingDetails
+    );
+  }
+
+  const detailRecord = details[0];
+
+  const newQuantity = detailRecord.quantity - parseInt(soldQuantity);
+
+  const { error: errorUpdatingDetailQuantity } = await supabase
+    .from("details")
+    .update({ quantity: newQuantity })
+    .eq("id", detailRecord.id);
+
+  if (errorUpdatingDetailQuantity) {
+    throw new Error(
+      "Error updating detail quantity:",
+      errorUpdatingDetailQuantity
+    );
+  }
+
+  if (newQuantity === 0) {
+    const { error: errorDeletingRow } = await supabase
+      .from("details")
+      .delete()
+      .eq("id", detailRecord.id);
+
+    if (errorDeletingRow) {
+      throw new Error(
+        "Error deleting row with zero quantity:",
+        errorDeletingRow
+      );
+    }
+  }
+
+  const { error: errorUpdatingProduct } = await supabase
     .from("products")
-    .upsert({
-      id: sellItem.Item_Id,
-      quantity: currentQuantity - parseInt(soldQuantity),
+    .update({
       profit:
         currentProfit +
-        parseInt(
-          soldQuantity * sellItem.S_Unit_Price -
-            products[0].price * soldQuantity
-        ),
+        (parseInt(soldQuantity) * sellItem.S_Unit_Price -
+          detailRecord.price * parseInt(soldQuantity)),
     })
+    .eq("id", sellItem.Item_Id);
+
+  if (errorUpdatingProduct) {
+    console.error("Error updating product:", errorUpdatingProduct);
+  }
+}
+
+export async function addProduct(data) {
+  const { data: moreProducts, error: errorAddingMore } = await supabase
+    .from("details")
+    .insert([
+      {
+        productId: Number(data.Item_Id),
+        quantity: Number(data.added_Quantity),
+        price: Number(data.new_Price),
+        boughtDate: data.bought_New,
+        paid: data.new_Paid,
+      },
+    ])
     .select();
 
-  if (errorUpdatingQuantityandProfit) {
-    throw new Error(
-      "Error during decreasing product quantity and updating profit"
-    );
+  if (errorAddingMore) {
+    throw new Error("More quantity could not be added");
   }
 }

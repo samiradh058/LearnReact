@@ -11,6 +11,7 @@ function SellingPrice() {
 
   const { productId } = useParams();
   const { isPending, product } = useProductId(productId);
+  console.log(product);
   const navigate = useNavigate();
 
   const { register, handleSubmit, reset } = useForm({
@@ -32,6 +33,10 @@ function SellingPrice() {
   const labelStyle = "text-2xl mr-10";
   const inputStyle =
     "px-2 text-xl border rounded-md h-10 border-stone-400 border-stone-400";
+
+  const oldestItemQuantity = product.details.sort(
+    (a, b) => new Date(a.boughtDate) - new Date(b.boughtDate)
+  )[0].quantity;
 
   return (
     <>
@@ -65,6 +70,7 @@ function SellingPrice() {
               <label className={labelStyle} htmlFor="quantity">
                 Quantity:
               </label>
+
               <input
                 className={`${inputStyle} w-[254px]`}
                 type="number"
@@ -74,7 +80,7 @@ function SellingPrice() {
                 {...register("Quantity_Sold", {})}
                 onBlur={(e) => {
                   let value = parseInt(e.target.value);
-                  if (value > product.quantity) value = product.quantity;
+                  if (value > oldestItemQuantity) value = oldestItemQuantity;
                   else if (value < 0) value = 0;
                   e.target.value = value;
                 }}
@@ -93,11 +99,6 @@ function SellingPrice() {
                 disabled={isSelling}
                 placeholder={product.price}
                 {...register("S_Unit_Price", {})}
-                onBlur={(e) => {
-                  let value = parseInt(e.target.value);
-                  if (value < product.price) value = product.price;
-                  e.target.value = value;
-                }}
               />
             </div>
 

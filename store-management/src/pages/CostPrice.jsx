@@ -1,39 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useCreateProduct } from "../features/product/useCreateProduct";
-// import { useProducts } from "../features/product/useProducts";
-
-// import Spinner from "../ui/Spinner";
-// import { useState } from "react";
 
 function CostPrice() {
-  // const [selectedProduct, setSelectedProduct] = useState("");
-  // const [customProductName, setCustomProductName] = useState("");
-
-  // const { isPending, products } = useProducts();
-
-  // const handleSelectChange = (event) => {
-  //   const value = event.target.value;
-  //   setSelectedProduct(value);
-  //   setCustomProductName(""); // Clear custom input when a product is selected
-  // };
-
-  // const handleInputChange = (event) => {
-  //   setCustomProductName(event.target.value);
-  // };
-
-  // const isCustomInput = !products?.some(
-  //   (product) => product.name === selectedProduct
-  // );
-
   const { isCreating, createNewProduct } = useCreateProduct();
 
   const { register, handleSubmit, formState, reset } = useForm({
     defaultValues: {},
   });
-
-  // if (isPending) {
-  //   return <Spinner />;
-  // }
 
   const { errors } = formState;
   console.log(errors);
@@ -57,28 +30,6 @@ function CostPrice() {
         <h2 className="flex justify-center text-green-600 text-3xl pb-6 font-medium">
           Add a item
         </h2>
-
-        {/* <div>
-          <select value={selectedProduct} onChange={handleSelectChange}>
-            <option value="">Select a product</option>
-            {products?.map((product) => (
-              <option key={product.name} value={product.name}>
-                {product.name}
-              </option>
-            ))}
-          </select>
-
-          {isCustomInput && (
-            <div>
-              <input
-                type="text"
-                value={customProductName}
-                onChange={handleInputChange}
-                placeholder="Enter product name"
-              />
-            </div>
-          )}
-        </div> */}
 
         <div className="grid grid-cols-2 gap-4 w-[690px]">
           <label className={labelStyle} htmlFor="name">

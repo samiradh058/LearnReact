@@ -1,5 +1,9 @@
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import { useProductId } from "./useProductId";
+
+import { useAddMore } from "./useAddMore";
 
 import Spinner from "../../ui/Spinner";
 import { useForm } from "react-hook-form";
@@ -8,17 +12,22 @@ export default function AddingMoreForm() {
   const { productId } = useParams();
   const { isPending, product } = useProductId(productId);
 
+  const navigate = useNavigate();
+
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       Item_Id: productId,
     },
   });
 
-  if (isPending) return <Spinner />;
+  const { isAdding, addMore } = useAddMore();
+
+  if (isPending || isAdding) return <Spinner />;
 
   function onSubmit(data) {
-    console.log(data);
+    addMore(data);
     reset();
+    navigate("/products");
   }
 
   const labelStyle = "text-2xl mr-10";
