@@ -4,11 +4,10 @@ import { useProducts } from "./useProducts";
 
 import Spinner from "../../ui/Spinner";
 import ProductItem from "./ProductItem";
-import Pagination from "../../ui/Pagination";
+import Counting from "../../ui/Counting";
 
 function ProductTable({ sortCriteria }) {
   const { isPending, products } = useProducts();
-  console.log(products);
 
   if (isPending || !products) return <Spinner />;
 
@@ -54,7 +53,7 @@ function ProductTable({ sortCriteria }) {
         {sortProducts.map((product) => (
           <ProductItem product={product} key={product.id} />
         ))}
-        <Pagination count={products.length} />
+        <Counting count={products.length} />
       </div>
     </>
   );

@@ -5,7 +5,7 @@
 // import { PAGE_SIZE } from "../../constants";
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 
-function Pagination({ count }) {
+function Counting({ count }) {
   // const [searchParams, setSearchParams] = useSearchParams();
   // const currentPage = !searchParams.get("page")
   //   ? 1
@@ -75,4 +75,4 @@ function Pagination({ count }) {
   );
 }
 
-export default Pagination;
+export default Counting;
