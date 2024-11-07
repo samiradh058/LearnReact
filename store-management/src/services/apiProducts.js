@@ -8,38 +8,60 @@ export async function getProducts({ page, filter }) {
     .from("products")
     .select("*, details(*)", { count: "exact" });
 
-  // const { data, error, count } = await query;
-  // console.log(data);
+  let { data, error: productFetchError, count } = await query;
+
+  if (productFetchError) {
+    throw new Error("Error fetching product details");
+  }
 
   // // Filter
   // if (filter) {
   //   console.log(filter);
+  //   console.log(filter.operator);
+  //   console.log(filter.value);
+  //   console.log("HELLO");
   //   if (filter.operator === "gt") {
-  //     query = query.gt(
-  //       data[0].details.reduce((sum, item) => sum + item.quantity, 0),
-  //       filter.value
-  //     );
-  //   } else if (filter.operator === "eq") {
-  //     query = query.eq(
-  //       data[0].details.reduce((sum, item) => sum + item.quantity, 0),
-  //       filter.value
-  //     );
+  //     query = query.gt("details.quantity", filter.value);
   //   }
+  //   // query = query.gt(
+  //   //   productData[0].details.reduce((sum, item) => sum + item.quantity, 0),
+  //   //   filter.value
+  //   // );
+  // } else if (filter.operator === "eq") {
+  //   query = query.eq("details.quantity", filter.value);
+  //   // query = query.eq(
+  //   //   productData[0].details.reduce((sum, item) => sum + item.quantity, 0),
+  //   //   filter.value
+  //   // );
   // }
 
-  if (page) {
-    // Pagination
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + (PAGE_SIZE - 1);
-    query = query.range(from, to);
+  if (filter) {
+    data = data.filter((product) => {
+      if (filter.operator === "gt") {
+        return product.details.some((detail) => detail.quantity > filter.value);
+      } else if (filter.operator === "eq") {
+        return (
+          product.details.length === 0 ||
+          product.details.some((detail) => detail.quantity === filter.value)
+        );
+      }
+    });
   }
+  return { data };
 
-  const { data, error, count } = await query;
-  if (error) {
-    throw new Error("Products could not be loaded");
-  }
-  console.log(data);
-  return { data, count };
+  // if (page) {
+  //   // Pagination
+  //   const from = (page - 1) * PAGE_SIZE;
+  //   const to = from + (PAGE_SIZE - 1);
+  //   query = query.range(from, to);
+  // }
+
+  // const { data, error, count } = await query;
+  // if (error) {
+  //   throw new Error("Products could not be loaded");
+  // }
+  // console.log(data);
+  // return { data, count };
 }
 
 export async function getProductsFromId(productId) {

@@ -4,7 +4,6 @@ import { NavLink } from "react-router-dom";
 import { HiCloudArrowUp } from "react-icons/hi2";
 
 function ProductItem({ product }) {
-  console.log(product);
   // const {
   //   id: productId,
   //   name,
