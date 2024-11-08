@@ -6,6 +6,7 @@ import { HiArrowLongLeft } from "react-icons/hi2";
 import Spinner from "../ui/Spinner";
 import { useRef, useState } from "react";
 import AddingMoreForm from "../features/product/AddingMoreForm";
+import { useUpdateBuyPaid } from "../features/product/useUpdateBuyPaid";
 
 function ProductDetails() {
   const [isModalOpen, setIsModalOpen] = useState();
@@ -13,7 +14,8 @@ function ProductDetails() {
 
   const { productId } = useParams();
   const { isPending, product, error } = useProductId(productId);
-  console.log(product);
+
+  const { updatePaid, updatingPaid } = useUpdateBuyPaid();
 
   const navigate = useNavigate();
 
@@ -109,12 +111,15 @@ function ProductDetails() {
             </div>
             <div className="flex">
               Paid:{" "}
-              <span className={`${listSytyle} flex`}>
+              <span className={`${listSytyle} flex`} disabled={updatingPaid}>
                 {product.details.map((each, index) => (
-                  <p key={index}>
+                  <button
+                    key={index}
+                    onClick={() => updatePaid({ index, productId })}
+                  >
                     {each.paid === true ? "✅" : "❌"}
                     {index < numOfDetails - 1 ? "," : ""}
-                  </p>
+                  </button>
                 ))}
               </span>
             </div>

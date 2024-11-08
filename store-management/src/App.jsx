@@ -10,6 +10,7 @@ import CostPrice from "./pages/CostPrice";
 import Products from "./pages/Products";
 import PageNotFound from "./pages/PageNotFound";
 import ProductDetails from "./pages/ProductDetails";
+import SellHistory from "./pages/SellHistory";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ function App() {
             <Route path="products/:productId" element={<ProductDetails />} />
             <Route path="buy" element={<CostPrice />} />
             <Route path="sell/:productId" element={<SellingPrice />} />
+            <Route path="/sells" element={<SellHistory />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

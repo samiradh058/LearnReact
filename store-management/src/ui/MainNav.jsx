@@ -1,5 +1,10 @@
 import { NavLink } from "react-router-dom";
-import { HiHome, HiCloudArrowDown, HiMiniCircleStack } from "react-icons/hi2";
+import {
+  HiHome,
+  HiCloudArrowDown,
+  HiMiniCircleStack,
+  HiCloudArrowUp,
+} from "react-icons/hi2";
 import classNames from "classnames";
 
 function MainNav() {
@@ -26,6 +31,12 @@ function MainNav() {
         <NavLink to="/buy" className={navLinkStyles}>
           <HiCloudArrowDown />
           Add New Item
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/sells" className={navLinkStyles}>
+          <HiCloudArrowUp />
+          Sells History
         </NavLink>
       </li>
       <li>

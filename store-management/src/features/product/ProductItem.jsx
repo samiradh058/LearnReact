@@ -20,9 +20,7 @@ function ProductItem({ product }) {
     <NavLink
       to={`${product.id}`}
       className={`grid grid-cols-[1fr_1.5fr_0.6fr_0.8fr_1fr_0.5fr]  gap-[2.4rem] items-center text-center px-4 py-4 my-2 hover:bg-stone-5  border rounded-xl ${
-        product.details.reduce((ini, acc) => ini + acc.quantity, 0) === 0
-          ? "bg-stone-200 "
-          : "bg-green-50 hover:bg-green-100"
+        numOfDetails === 0 ? "bg-stone-200 " : "bg-green-50 hover:bg-green-100"
       }`}
     >
       <div className="flex justify-center">
@@ -35,14 +33,14 @@ function ProductItem({ product }) {
       <div>{product.name}</div>
       <div>
         <div>
-          <>{product.details.reduce((ini, acc) => ini + acc.quantity, 0)}</>
+          <>
+            {product.details
+              ? product.details.reduce((ini, acc) => ini + acc.quantity, 0)
+              : "-"}
+          </>
         </div>
-        <div
-          className={`justify-center ${
-            product.details.length > 3 ? "" : "flex"
-          }`}
-        >
-          {product.details.length > 1 && (
+        <div className={`justify-center ${numOfDetails > 3 ? "" : "flex"}`}>
+          {numOfDetails > 1 && (
             <>
               ({" "}
               {product.details.map((each, index) => (
@@ -59,7 +57,7 @@ function ProductItem({ product }) {
 
       <div>
         <div>
-          {product.details.length > 0 ? (
+          {numOfDetails > 0 ? (
             <>
               {(
                 product.details.reduce((ini, acc) => ini + acc.price, 0) /
@@ -70,12 +68,8 @@ function ProductItem({ product }) {
             "-"
           )}
         </div>
-        <div
-          className={`justify-center ${
-            product.details.length > 3 ? "" : "flex"
-          }`}
-        >
-          {product.details.length > 1 && (
+        <div className={`justify-center ${numOfDetails > 3 ? "" : "flex"}`}>
+          {numOfDetails > 1 && (
             <>
               (
               {product.details && (
@@ -94,7 +88,7 @@ function ProductItem({ product }) {
         </div>
       </div>
       <div>
-        {product.details.length > 0 ? (
+        {numOfDetails > 0 ? (
           <>
             {product.details.map((each, index) => (
               <p key={index}>
@@ -107,7 +101,7 @@ function ProductItem({ product }) {
           "-"
         )}
       </div>
-      {product.details.reduce((ini, acc) => ini + acc.quantity, 0) > 0 && (
+      {product.details && (
         <NavLink
           className="ml-6 bg-green-400 px-4 py-2 w-fit rounded-lg"
           to={`../sell/${product.id}`}

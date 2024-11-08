@@ -18,7 +18,7 @@ export default function FilterProducts() {
   function handleSelect(e) {
     const value = e.target.value;
     searchParams.set(filter.filterField, value);
-    if (searchParams.get("page")) searchParams.set("page", 1);
+    // if (searchParams.get("page")) searchParams.set("page", 1);
     setSearchParams(searchParams);
   }
 

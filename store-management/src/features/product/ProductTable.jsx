@@ -5,11 +5,24 @@ import { useProducts } from "./useProducts";
 import Spinner from "../../ui/Spinner";
 import ProductItem from "./ProductItem";
 import Counting from "../../ui/Counting";
+import { useSearchParams } from "react-router-dom";
 
 function ProductTable({ sortCriteria }) {
-  const { isPending, products } = useProducts();
+  const [searchParams] = useSearchParams();
+
+  let { isPending, products } = useProducts();
 
   if (isPending || !products) return <Spinner />;
+
+  // For searching
+  const searchValue = searchParams.get("search")?.toLowerCase();
+  if (!searchValue) {
+    products = products;
+  } else {
+    products = products.filter((product) =>
+      product.name.toLowerCase().includes(searchValue)
+    );
+  }
 
   // Sort the products
   let criteria = sortCriteria ? sortCriteria : "name-asc";
@@ -28,15 +41,44 @@ function ProductTable({ sortCriteria }) {
     );
   }
 
-  if (field === "quantity") {
-    sortProducts = products.sort((a, b) => (a[field] - b[field]) * modifier);
-  }
+  const productWithHighestQuantity = products.map((product) => {
+    const totalQuantity = product.details
+      ? product.details.reduce((ini, acc) => ini + acc.quantity, 0)
+      : 0;
+    return { ...product, totalQuantity };
+  });
 
-  if (field === "boughtDate") {
-    sortProducts = products.sort(
-      (a, b) => (new Date(a[field]) - new Date(b[field])) * modifier
+  if (field === "quantity") {
+    sortProducts = productWithHighestQuantity.sort(
+      (a, b) => (a.totalQuantity - b.totalQuantity) * modifier
     );
   }
+
+  // if (field === "quantity") {
+  //   sortProducts = products.sort((a, b) => (a[field] - b[field]) * modifier);
+  // }
+
+  const productWithLatestDate = products.map((product) => {
+    const latestDate = product.details.reduce((latest, detail) => {
+      const detailDate = new Date(detail.boughtDate);
+      return detailDate > latest ? detailDate : latest;
+    }, new Date(0));
+
+    return { ...product, latestBoughtDate: latestDate };
+  });
+
+  if (field === "boughtDate") {
+    sortProducts = productWithLatestDate.sort(
+      (a, b) =>
+        (new Date(a.latestBoughtDate) - new Date(b.latestBoughtDate)) * modifier
+    );
+  }
+
+  // if (field === "boughtDate") {
+  //   sortProducts = products.sort(
+  //     (a, b) => (new Date(a[field]) - new Date(b[field])) * modifier
+  //   );
+  // }
 
   return (
     <>

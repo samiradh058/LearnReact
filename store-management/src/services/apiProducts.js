@@ -153,8 +153,6 @@ export async function createBuyer(sellItem) {
     .select("profit, details(quantity, price)")
     .eq("id", sellItem.Item_Id);
 
-  console.log(products);
-
   if (decreaseQuantityError) {
     throw new Error("Error fetching product quantity!");
   }
@@ -246,4 +244,37 @@ export async function addProduct(data) {
   if (errorAddingMore) {
     throw new Error("More quantity could not be added");
   }
+}
+
+export async function updateBuyPaidStatus({ index, productId }) {
+  const { data, error } = await supabase
+    .from("details")
+    .select("*")
+    .eq("productId", productId);
+
+  if (error) {
+    throw new Error("Problem fetching details table");
+  }
+
+  if (data && data[index]) {
+    const currentPaidStatus = data[index].paid;
+    const { error: updateError } = await supabase
+      .from("details")
+      .update({ paid: !currentPaidStatus })
+      .eq("id", data[index].id);
+
+    if (updateError) {
+      throw new Error("Problem updating paid status");
+    }
+  }
+}
+
+export async function sellsDetails() {
+  const { data: sells, error } = await supabase.from("sells").select("*");
+
+  if (error) {
+    throw new Error("Error fetching sells history");
+  }
+
+  return { sells };
 }
