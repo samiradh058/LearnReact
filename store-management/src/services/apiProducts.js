@@ -278,3 +278,24 @@ export async function sellsDetails() {
 
   return { sells };
 }
+
+export async function updateSellPaidStatus(sellId) {
+  const { data, error } = await supabase
+    .from("sells")
+    .select("*")
+    .eq("id", sellId);
+
+  if (error) {
+    throw new Error("Problem fetching sell details");
+  }
+
+  const { error: updateError } = await supabase
+    .from("sells")
+    .update({ Money_Received: !data[0].Money_Received })
+    .eq("id", sellId)
+    .select();
+
+  if (updateError) {
+    throw new Error("Problem fetching sell details");
+  }
+}

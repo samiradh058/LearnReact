@@ -28,7 +28,7 @@ function Counting({ count }) {
   // if (pageCount <= 1) return null;
 
   return (
-    <div className="flex justify-between items-center mt-8">
+    <div className="flex justify-end items-center">
       {/* <p className="ml-4 text-stone-800">
         Showing{" "}
         <span className="font-bold text-stone-900">
@@ -40,7 +40,7 @@ function Counting({ count }) {
         </span>{" "}
         of <span className="font-bold text-stone-900">{count}</span> results
       </p> */}
-      <p>Showing all {count} products</p>
+      <p className="">Showing all {count} products</p>
       <div className="flex space-x-6 mr-4 mb-1">
         {/* <button
           onClick={prevPage}

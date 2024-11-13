@@ -9,12 +9,12 @@ function Products() {
 
   return (
     <div>
+      <div className="flex justify-end mr-6 mt-4">
+        <Search />
+      </div>
       <div className="flex justify-end mt-4">
         <FilterProduct />
         <SortProducts setSortCriteria={setSortCriteria} />
-      </div>
-      <div className="flex justify-end mr-6 mt-4">
-        <Search />
       </div>
 
       <ProductTable sortCriteria={sortCriteria} />
