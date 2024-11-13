@@ -9,7 +9,6 @@ function CostPrice() {
   });
 
   const { errors } = formState;
-  console.log(errors);
 
   function onSubmit(data) {
     const image = data.image[0];

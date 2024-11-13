@@ -79,7 +79,6 @@ export async function getProductsFromId(productId) {
 }
 
 export async function createProduct(newProduct) {
-  console.log(newProduct);
   const imageName = `${Math.random()}-${newProduct.image.name}`.replaceAll(
     "/",
     ""
@@ -116,6 +115,7 @@ export async function createProduct(newProduct) {
         quantity: newProduct.quantity,
         paid: newProduct.paid,
         productId: newProductId,
+        totalCP: newProduct.quantity * newProduct.price,
       },
     ])
     .select();
