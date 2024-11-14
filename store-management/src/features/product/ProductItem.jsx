@@ -101,7 +101,7 @@ function ProductItem({ product }) {
           "-"
         )}
       </div>
-      {product.details && (
+      {product.details.length > 0 && (
         <NavLink
           className="ml-6 bg-green-400 px-4 py-2 w-fit rounded-lg"
           to={`../sell/${product.id}`}

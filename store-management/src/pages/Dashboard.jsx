@@ -117,7 +117,7 @@ function Dashboard() {
           <div className="bg-red-100 p-4 text-center flex-1 hover:bg-red-200 text-xl ">
             <h3 className="italic">Remaining to pay:</h3>
             <div className="mt-8">
-              {itemsToPay.map((each) => {
+              {itemsToPay?.map((each) => {
                 return (
                   <div key={each.id} className="text-left mt-2">
                     Need to pay Rs.
