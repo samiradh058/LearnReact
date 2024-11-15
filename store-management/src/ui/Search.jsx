@@ -11,16 +11,18 @@ function Search() {
   }
 
   return (
-    <form className="relative" onSubmit={handleSubmit}>
+    <form className="flex items-center" onSubmit={handleSubmit}>
       <input
         type="text"
         id="search"
         placeholder="Search"
-        className="border border-stone-800 rounded-lg px-2 py-1"
+        className="border border-l-stone-800 border-t-stone-800 border-b-stone-800 rounded-lg px-2 py-1"
       />
-      <button className="absolute right-[1px] top-1/2 transform -translate-y-1/2 text-xl bg-stone-400 py-[6px] px-2 rounded-lg">
-        <HiMagnifyingGlass />
-      </button>
+      <div className="bg-stone-300 border rounded-lg border-stone-800 ml-[-4px]">
+        <button className=" py-2 px-2 ">
+          <HiMagnifyingGlass />
+        </button>
+      </div>
     </form>
   );
 }

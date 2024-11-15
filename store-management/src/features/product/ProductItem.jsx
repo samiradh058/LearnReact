@@ -19,13 +19,13 @@ function ProductItem({ product }) {
   return (
     <NavLink
       to={`${product.id}`}
-      className={`grid grid-cols-[1fr_1.5fr_0.6fr_0.8fr_1fr_0.5fr]  gap-[2.4rem] items-center text-center px-4 py-4 my-2 hover:bg-stone-5  border rounded-xl ${
+      className={`grid grid-cols-[0.8fr_1.5fr_0.6fr_0.8fr_1fr_0.5fr]  gap-[2.4rem] items-center text-center px-2 py-2 my-2 hover:bg-stone-5  border rounded-xl ${
         numOfDetails === 0 ? "bg-stone-200 " : "bg-green-50 hover:bg-green-100"
       }`}
     >
       <div className="flex justify-center">
         <img
-          className="h-[100px] w-[150px]"
+          className="h-[80px] w-[120px]"
           src={product.image}
           alt="Product image"
         />
