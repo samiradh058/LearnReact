@@ -11,10 +11,9 @@ function SellingPrice() {
 
   const { productId } = useParams();
   const { isPending, product } = useProductId(productId);
-  console.log(product);
   const navigate = useNavigate();
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       Item_Id: productId,
     },
@@ -34,9 +33,11 @@ function SellingPrice() {
   const inputStyle =
     "px-2 text-xl border rounded-md h-10 border-stone-400 border-stone-400";
 
-  const oldestItemQuantity = product.details.sort(
-    (a, b) => new Date(a.boughtDate) - new Date(b.boughtDate)
-  )[0].quantity;
+  const oldestItemQuantity = product.details
+    .filter((item) => item.quantity > 0)
+    .sort(
+      (a, b) => new Date(a.boughtDate) - new Date(b.boughtDate)
+    )[0].quantity;
 
   return (
     <>
@@ -83,6 +84,7 @@ function SellingPrice() {
                   if (value > oldestItemQuantity) value = oldestItemQuantity;
                   else if (value < 0) value = 0;
                   e.target.value = value;
+                  setValue("Quantity_Sold", value);
                 }}
               />
             </div>

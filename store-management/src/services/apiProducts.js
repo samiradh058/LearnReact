@@ -165,6 +165,7 @@ export async function createBuyer(sellItem) {
     (ini, acc) => ini + acc.quantity,
     0
   );
+
   const soldQuantity = sellItem.Quantity_Sold;
   const currentProfit = products[0].profit;
 
@@ -184,7 +185,8 @@ export async function createBuyer(sellItem) {
 
   const detailRecord = details[0];
 
-  const newQuantity = detailRecord.quantity - parseInt(soldQuantity);
+  const newQuantity = Number(detailRecord.quantity) - Number(soldQuantity);
+  console.log(newQuantity);
 
   const { error: errorUpdatingDetailQuantity } = await supabase
     .from("details")
@@ -198,7 +200,7 @@ export async function createBuyer(sellItem) {
     );
   }
 
-  if (newQuantity === 0) {
+  if (newQuantity === 0 && detailRecord.paid) {
     const { error: errorDeletingRow } = await supabase
       .from("details")
       .delete()
@@ -266,6 +268,15 @@ export async function updateBuyPaidStatus({ index, productId }) {
     if (updateError) {
       throw new Error("Problem updating paid status");
     }
+  }
+
+  const updatedPaidStatus = !data[index].paid;
+
+  if (updatedPaidStatus && data[index].quantity === 0) {
+    const { error: deleteError } = await supabase
+      .from("details")
+      .delete()
+      .eq("id", data[index].id);
   }
 }
 
